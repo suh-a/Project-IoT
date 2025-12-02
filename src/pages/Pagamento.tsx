@@ -21,7 +21,12 @@ const Pagamento = () => {
     bairro: "",
     cidade: "",
     estado: "",
-    cep: ""
+    cep: "",
+    numeroCartao: "",
+    nomeCartao: "",
+    vencimento: "",
+    cvv: ""
+
   });
 
   const plans: Record<string, { name: string; price: string }> = {
@@ -201,6 +206,60 @@ const Pagamento = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Card Info */}
+                  <div className="space-y-4">
+                    <h2 className="font-semibold text-foreground border-b border-border pb-2">
+                      Dados do Cartão
+                    </h2>
+
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2 sm:col-span-2">
+                        <Label htmlFor="numeroCartao">Número do Cartão</Label>
+                        <Input
+                          id="numeroCartao"
+                          name="numeroCartao"
+                          placeholder="0000 0000 0000 0000"
+                          value={formData.numeroCartao}
+                          onChange={handleChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2 sm:col-span-2">
+                        <Label htmlFor="nomeCartao">Nome do Titular</Label>
+                        <Input
+                          id="nomeCartao"
+                          name="nomeCartao"
+                          placeholder="Como está no cartão"
+                          value={formData.nomeCartao}
+                          onChange={handleChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="vencimento">Data de Vencimento</Label>
+                        <Input
+                          id="vencimento"
+                          name="vencimento"
+                          placeholder="MM/AA"
+                          value={formData.vencimento}
+                          onChange={handleChange}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="cvv">CVV</Label>
+                        <Input
+                          id="cvv"
+                          name="cvv"
+                          placeholder="123"
+                          value={formData.cvv}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
 
                   <Button type="submit" variant="hero" size="lg" className="w-full">
                     <CreditCard className="w-5 h-5 mr-2" />
