@@ -10,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const auth = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -35,7 +36,6 @@ const Login = () => {
 
     (async () => {
       try {
-        const auth = useAuth();
         await auth.login(formData.email, formData.senha);
         toast({
           title: "Login realizado!",
