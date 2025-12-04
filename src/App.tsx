@@ -9,6 +9,8 @@ import Planos from "./pages/Planos";
 import Pagamento from "./pages/Pagamento";
 import Cadastro from "./pages/Cadastro";
 import Login from "./pages/Login";
+import Desafios from "./pages/Desafios";
+import Perfil from "./pages/Perfil";
 import Tutorial from "./pages/Tutorial";
 import NotFound from "./pages/NotFound";
 
@@ -27,6 +29,8 @@ const App = () => (
           <Route path="/pagamento" element={<Pagamento />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/desafios" element={<Desafios />} />
+          <Route path="/perfil" element={<Perfil />} />
           <Route path="/tutorial" element={<Tutorial />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

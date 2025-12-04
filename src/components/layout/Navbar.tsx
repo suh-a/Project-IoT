@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Menu, X } from "lucide-react";
 
@@ -55,9 +56,12 @@ const Navbar = () => {
                 <Button variant="outline" asChild>
                   <Link to="/perfil">Perfil</Link>
                 </Button>
-                <div className="px-3 py-1 text-sm text-muted-foreground bg-muted/20 rounded-md">
-                  {user.email}
-                </div>
+                <Link to="/perfil" className="flex items-center gap-2">
+                  <Avatar>
+                    <AvatarImage src="/placeholder.svg" alt={user.email || "Usuário"} />
+                    <AvatarFallback>{(user.email || "").charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                </Link>
               </>
             ) : (
               <>
