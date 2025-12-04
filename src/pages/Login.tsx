@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { LogIn, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,12 +33,24 @@ const Login = () => {
       return;
     }
 
-    toast({
-      title: "Login realizado!",
-      description: "Bem-vindo de volta!",
-    });
-
-    setTimeout(() => navigate("/"), 1500);
+    (async () => {
+      try {
+        const auth = useAuth();
+        await auth.login(formData.email, formData.senha);
+        toast({
+          title: "Login realizado!",
+          description: "Bem-vindo de volta!",
+        });
+        setTimeout(() => navigate("/"), 700);
+      } catch (err: any) {
+        console.error("Login failed:", err);
+        toast({
+          title: "Erro ao entrar",
+          description: err?.message || "Não foi possível efetuar o login.",
+          variant: "destructive"
+        });
+      }
+    })();
   };
 
   return (

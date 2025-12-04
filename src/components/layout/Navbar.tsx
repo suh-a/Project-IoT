@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -46,38 +47,25 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            {/* Show profile links when logged in */}
-            {(() => {
-              try {
-                const auth = useAuth();
-                if (auth && auth.user) {
-                  return (
-                    <>
-                      <Button variant="ghost" asChild>
-                        <Link to="/desafios">Desafios</Link>
-                      </Button>
-                      <Button variant="outline" asChild>
-                        <Link to="/perfil">Perfil</Link>
-                      </Button>
-                    </>
-                  );
-                }
-              } catch (e) {
-                // If useAuth throws (no provider), fallback to showing login/register
-                console.warn("useAuth not available in Navbar:", e);
-              }
-
-              return (
-                <>
-                  <Button variant="ghost" asChild>
-                    <Link to="/login">Entrar</Link>
-                  </Button>
-                  <Button variant="hero" asChild>
-                    <Link to="/cadastro">Cadastrar</Link>
-                  </Button>
-                </>
-              );
-            })()}
+            {user ? (
+              <>
+                <Button variant="ghost" asChild>
+                  <Link to="/desafios">Desafios</Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link to="/perfil">Perfil</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" asChild>
+                  <Link to="/login">Entrar</Link>
+                </Button>
+                <Button variant="hero" asChild>
+                  <Link to="/cadastro">Cadastrar</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
