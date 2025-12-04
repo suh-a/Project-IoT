@@ -6,9 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { UserPlus, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Cadastro = () => {
   const navigate = useNavigate();
+  const auth = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     nome: "",
@@ -52,12 +54,24 @@ const Cadastro = () => {
       return;
     }
 
-    toast({
-      title: "Cadastro realizado!",
-      description: "Sua conta foi criada com sucesso.",
-    });
-
-    setTimeout(() => navigate("/login"), 1500);
+    (async () => {
+      try {
+        await auth.register(formData.nome, formData.email, formData.senha);
+        toast({
+          title: "Cadastro realizado!",
+          description: "Sua conta foi criada com sucesso.",
+        });
+        // After register, user is usually signed in. Navigate to home/logged area
+        setTimeout(() => navigate("/"), 800);
+      } catch (err: any) {
+        console.error("Register failed:", err);
+        toast({
+          title: "Erro ao cadastrar",
+          description: err?.message || "Não foi possível criar a conta.",
+          variant: "destructive"
+        });
+      }
+    })();
   };
 
   return (

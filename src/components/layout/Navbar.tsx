@@ -55,6 +55,9 @@ const Navbar = () => {
                 <Button variant="outline" asChild>
                   <Link to="/perfil">Perfil</Link>
                 </Button>
+                <div className="px-3 py-1 text-sm text-muted-foreground bg-muted/20 rounded-md">
+                  {user.email}
+                </div>
               </>
             ) : (
               <>
