@@ -42,18 +42,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log("onAuthStateChanged fired. user:", firebaseUser);
       setUser(firebaseUser);
-      
-      if (firebaseUser) {
-        const userRef = ref(database, `users/${firebaseUser.uid}`);
-        const snapshot = await get(userRef);
-        if (snapshot.exists()) {
-          setUserData(snapshot.val());
+
+      try {
+        if (firebaseUser) {
+          const userRef = ref(database, `users/${firebaseUser.uid}`);
+          const snapshot = await get(userRef);
+          if (snapshot.exists()) {
+            console.log("User data loaded from RTDB:", snapshot.val());
+            setUserData(snapshot.val());
+          } else {
+            console.log("No user data found in RTDB for uid:", firebaseUser.uid);
+            setUserData(null);
+          }
+        } else {
+          setUserData(null);
         }
-      } else {
+      } catch (err) {
+        console.error("Error reading user data from RTDB:", err);
         setUserData(null);
       }
-      
+
       setLoading(false);
     });
 
@@ -61,20 +71,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    try {
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      console.log("signInWithEmailAndPassword success:", cred.user.uid);
+    } catch (err) {
+      console.error("login error:", err);
+      throw err;
+    }
   };
 
   const register = async (name: string, email: string, password: string) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    
-    await updateProfile(userCredential.user, { displayName: name });
-    
-    const userRef = ref(database, `users/${userCredential.user.uid}`);
-    await set(userRef, {
-      name,
-      email,
-      createdAt: new Date().toISOString()
-    });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      await updateProfile(userCredential.user, { displayName: name });
+
+      const userRef = ref(database, `users/${userCredential.user.uid}`);
+      await set(userRef, {
+        name,
+        email,
+        createdAt: new Date().toISOString()
+      });
+
+      console.log("User registered and data saved:", userCredential.user.uid);
+    } catch (err) {
+      console.error("register error:", err);
+      throw err;
+    }
   };
 
   const logout = async () => {
